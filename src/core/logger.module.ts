@@ -8,6 +8,7 @@ import { LOG_TRANSPORT, LOGGER_OPTIONS } from "./logger.constants.js";
 import type { LoggerModuleOptions } from "./logger.options.js";
 import { OMNIXYS_LOGGER } from "../token.js";
 import { LoggingInterceptor } from "../nest/logger.interceptor.js";
+import { ExceptionReporter } from "../diagnostics/exception-reporter.js";
 
 @Global()
 @Module({})
@@ -22,6 +23,7 @@ export class LoggerModule {
 
         AsyncBatchLogger,
         OmnixysLogger,
+        ExceptionReporter,
         LoggingInterceptor,
         { provide: OMNIXYS_LOGGER, useExisting: OmnixysLogger },
 
@@ -31,7 +33,12 @@ export class LoggerModule {
 
         { provide: LOG_TRANSPORT, useClass: OtelLogTransport },
       ],
-      exports: [OmnixysLogger, OMNIXYS_LOGGER, LoggingInterceptor],
+      exports: [
+        OmnixysLogger,
+        OMNIXYS_LOGGER,
+        ExceptionReporter,
+        LoggingInterceptor,
+      ],
     };
   }
 }

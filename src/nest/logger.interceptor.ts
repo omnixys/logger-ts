@@ -2,6 +2,7 @@ import {
   type CallHandler,
   type ExecutionContext,
   Injectable,
+  Optional,
   type NestInterceptor,
 } from "@nestjs/common";
 import { ContextAccessor } from "@omnixys/context/accessor";
@@ -9,6 +10,8 @@ import { ContextAccessor } from "@omnixys/context/accessor";
 import { type Observable, tap } from "rxjs";
 import { OmnixysLogger } from "../logger/omnixys-logger.js";
 import { getCanonicalLogMetadata } from "../logger/context-log-metadata.js";
+import { ExceptionReporter } from "../diagnostics/exception-reporter.js";
+import { serializeExceptionForLog } from "../diagnostics/exception-serializer.js";
 
 type HttpRequest = {
   method?: string;
@@ -26,7 +29,15 @@ type HttpResponse = {
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
-  constructor(private readonly logger: OmnixysLogger) {}
+  constructor(logger: OmnixysLogger);
+  constructor(
+    logger: OmnixysLogger,
+    exceptionReporter?: ExceptionReporter,
+  );
+  constructor(
+    private readonly logger: OmnixysLogger,
+    @Optional() private readonly exceptionReporter?: ExceptionReporter,
+  ) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const transport = requestTransport(context);
@@ -83,17 +94,29 @@ export class LoggingInterceptor implements NestInterceptor {
         },
         error: (err: unknown) => {
           const duration = Date.now() - start;
-
-          log.error("Request failed", {
-            method,
-            url,
-            statusCode: response.statusCode,
-            duration,
-            ip,
-            userId,
-            ...getCanonicalLogMetadata(),
-            error: normalizeError(err),
-          });
+          if (this.exceptionReporter) {
+            this.exceptionReporter.report(err, {
+              operation: requestContext?.transport?.operation ?? url,
+              module: context.getClass?.()?.name,
+              method: context.getHandler?.()?.name,
+              transport: type,
+              httpMethod: method,
+              route: url,
+              statusCode: response.statusCode,
+              durationMs: duration,
+            });
+          } else {
+            log.error("Request failed", {
+              method,
+              url,
+              statusCode: response.statusCode,
+              duration,
+              ip,
+              userId,
+              ...getCanonicalLogMetadata(),
+              exception: serializeExceptionForLog(err),
+            });
+          }
         },
       }),
     );
@@ -134,23 +157,4 @@ function requestTransport(
   }
 
   return undefined;
-}
-
-/**
- * Normalizes unknown errors into structured metadata.
- */
-function normalizeError(err: unknown) {
-  if (!err) return undefined;
-
-  if (err instanceof Error) {
-    return {
-      message: err.message,
-      stack: err.stack,
-      name: err.name,
-    };
-  }
-
-  return {
-    message: String(err),
-  };
 }

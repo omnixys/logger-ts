@@ -6,11 +6,15 @@ test("preserves the established root exports", () => {
   assert.deepEqual(
     Object.keys(loggerPackage).sort(),
     [
+      "ExceptionReporter",
       "LoggerModule",
       "LoggingInterceptor",
       "OmnixysLogger",
       "ScopedLogger",
       "getLogger",
+      "redactForLog",
+      "sanitizeLogMetadata",
+      "serializeExceptionForLog",
     ],
   );
 });

@@ -11,6 +11,10 @@ import {
 import { isTransportLoggingSuppressed } from "../transport/transport-recursion.guard.js";
 import { getCanonicalLogMetadata } from "./context-log-metadata.js";
 import { LogDTO, LogLevel } from "@omnixys/contracts";
+import {
+  redactForLog,
+  sanitizeLogMetadata,
+} from "../diagnostics/log-redaction.js";
 
 const levelMap = {
   trace: "trace",
@@ -117,19 +121,22 @@ export class ScopedLogger {
 
     const normalizedArgs = formatArgs.map(normalizeObject);
 
-    const msg = format(message, ...normalizedArgs);
+    const formattedMessage = format(message, ...normalizedArgs);
+    const redactedMessage = redactForLog(formattedMessage);
+    const msg =
+      typeof redactedMessage === "string" ? redactedMessage : "[Redacted log]";
     const extractedArgs = mapArgsToMetadata(message, formatArgs);
 
     const contextMetadata = getCanonicalLogMetadata();
 
-    metadata = {
+    metadata = sanitizeLogMetadata({
       ...this.baseMetadata,
       ...extractedArgs,
       ...metadata,
       clazz: this.clazz,
       ...(this.component ? { component: this.component } : {}),
       ...contextMetadata,
-    };
+    });
 
     const log: LogDTO = {
       level,
@@ -167,35 +174,7 @@ export class ScopedLogger {
 }
 
 function safeSerialize(value: unknown): unknown {
-  if (value === undefined) return undefined;
-
-  const seen = new WeakSet();
-
-  try {
-    const json = JSON.stringify(value, (_key, val) => {
-      if (typeof val === "object" && val !== null) {
-        if (seen.has(val)) return "[Circular]";
-        seen.add(val);
-      }
-
-      if (val instanceof Error) {
-        return {
-          message: val.message,
-          stack: val.stack,
-        };
-      }
-
-      if (typeof val === "bigint") {
-        return val.toString();
-      }
-
-      return val;
-    });
-
-    return json === undefined ? undefined : JSON.parse(json);
-  } catch {
-    return "[Unserializable]";
-  }
+  return redactForLog(value);
 }
 
 function extractKeysFromMessage(message: string): string[] {
@@ -234,9 +213,9 @@ function mapArgsToMetadata(
 
 function normalizeObject(value: unknown): unknown {
   if (value && typeof value === "object" && !Array.isArray(value)) {
-    return { ...value }; // 🔥 entfernt null prototype
+    return redactForLog(value);
   }
-  return value;
+  return redactForLog(value);
 }
 
 function toMetadataRecord(value: unknown): Record<string, unknown> {
