@@ -3,6 +3,16 @@
 All notable changes in this project will be documented in this file.
 
 
+## [3.2.0](https://github.com/omnixys/logger-ts/compare/v3.1.0...v3.2.0) (2026-07-30)
+
+### Errors
+
+* **Errors:** add canonical exception reporting ([](https://github.com/omnixys/logger-ts/commit/c3afa2cd4bf90bc4b8c509248d42a624e73ae216))
+
+### Rename
+
+* **Rename:** rename repo ([](https://github.com/omnixys/logger-ts/commit/b30ba8adbd4175c3367a85b3c1fd218b89a23fe7))
+
 ## [3.1.0](https://github.com/omnixys/logger/compare/v3.0.0...v3.1.0) (2026-07-23)
 
 ### Logger
