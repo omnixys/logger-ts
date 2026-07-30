@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { ContextAccessor } from "@omnixys/context";
-import { TraceRunner } from "@omnixys/observability";
+import { ContextAccessor } from "@omnixys/context-ts";
+import { TraceRunner } from "@omnixys/observability-ts";
 import { AsyncLocalStorageContextManager } from "@opentelemetry/context-async-hooks";
 import { context, trace } from "@opentelemetry/api";
 import {

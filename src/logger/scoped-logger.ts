@@ -10,7 +10,7 @@ import {
 } from "./logger.config.js";
 import { isTransportLoggingSuppressed } from "../transport/transport-recursion.guard.js";
 import { getCanonicalLogMetadata } from "./context-log-metadata.js";
-import { LogDTO, LogLevel } from "@omnixys/contracts";
+import { LogDTO, LogLevel } from "@omnixys/contracts-ts";
 import {
   redactForLog,
   sanitizeLogMetadata,

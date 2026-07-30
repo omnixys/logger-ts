@@ -1,4 +1,4 @@
-import type { LogDTO } from "@omnixys/contracts";
+import type { LogDTO } from "@omnixys/contracts-ts";
 import {
   logs,
   SeverityNumber,
@@ -20,7 +20,7 @@ const severityNumbers = {
 /** Bridges the Omnixys logger API into the globally configured OTel log provider. */
 export class OtelLogTransport implements LogTransport {
   async send(log: LogDTO): Promise<void> {
-    const logger = logs.getLogger("@omnixys/logger");
+    const logger = logs.getLogger("@omnixys/logger-ts");
     logger.emit({
       severityNumber: severityNumbers[log.level],
       severityText: log.level.toUpperCase(),

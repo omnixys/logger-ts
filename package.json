@@ -1,5 +1,5 @@
 {
-  "name": "@omnixys/logger",
+  "name": "@omnixys/logger-ts",
   "version": "3.1.0",
   "description": "A NestJS logger module for microservices, providing structured logging and integration with various log transports.",
   "type": "module",
@@ -44,9 +44,9 @@
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.4.2",
     "@nestjs/core": "^11.1.17",
-    "@omnixys/context": "link:../context",
-    "@omnixys/contracts": "link:../contracts",
-    "@omnixys/observability": "^3.0.0",
+    "@omnixys/context-ts": "^3.0.1",
+    "@omnixys/contracts-ts": "^3.2.2",
+    "@omnixys/observability-ts": "^3.2.0",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/context-async-hooks": "^2.6.0",
     "@opentelemetry/sdk-trace-base": "^2.6.0",
@@ -65,9 +65,9 @@
   "peerDependencies": {
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.1.17",
-    "@omnixys/context": "^2.0.0",
-    "@omnixys/contracts": "^2.0.0",
-    "@omnixys/observability": "^2.0.0",
+    "@omnixys/context-ts": "^2.0.0",
+    "@omnixys/contracts-ts": "^2.0.0",
+    "@omnixys/observability-ts": "^2.0.0",
     "@opentelemetry/api": "^1.9.0"
   },
   "dependencies": {

@@ -5,7 +5,7 @@ import {
   Optional,
   type NestInterceptor,
 } from "@nestjs/common";
-import { ContextAccessor } from "@omnixys/context/accessor";
+import { ContextAccessor } from "@omnixys/context-ts/accessor";
 
 import { type Observable, tap } from "rxjs";
 import { OmnixysLogger } from "../logger/omnixys-logger.js";

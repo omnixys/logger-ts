@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { ContextAccessor } from "@omnixys/context";
+import { ContextAccessor } from "@omnixys/context-ts";
 import { ScopedLogger } from "../dist/logger/scoped-logger.js";
 
 test("child loggers inherit metadata and compose component scopes", () => {

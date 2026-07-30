@@ -4,7 +4,7 @@ import {
   LoggingInterceptor,
   OmnixysLogger,
   ScopedLogger,
-} from "@omnixys/logger";
+} from "@omnixys/logger-ts";
 
 const dynamicModule = LoggerModule.forRoot({ serviceName: "orders" });
 const pinoLogger = getLogger("OrdersService");

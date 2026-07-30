@@ -1,4 +1,4 @@
-import { getErrorDefinition } from "@omnixys/contracts";
+import { getErrorDefinition } from "@omnixys/contracts-ts";
 import { redactForLog } from "./log-redaction.js";
 
 export interface SerializedException {

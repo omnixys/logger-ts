@@ -1,4 +1,4 @@
-import { ContextAccessor } from "@omnixys/context/accessor";
+import { ContextAccessor } from "@omnixys/context-ts/accessor";
 
 export interface CanonicalLogMetadata {
   readonly requestId: string;

@@ -39,14 +39,14 @@ All notable changes in this project will be documented in this file.
 ### ⚠ BREAKING CHANGE
 
 * **Logger:** Complete redesign of logging system with structured logging, context awareness,
-and tight integration with @omnixys/context and @omnixys/observability.
+and tight integration with @omnixys/context-ts and @omnixys/observability-ts.
 Legacy logging utilities and unstructured log patterns have been removed.
 
 ✨ Features:
 - Structured logging (JSON-first) for production-grade observability
 - Context-aware logging:
   - Automatic injection of requestId, tenantId, actorId
-  - Integration with AsyncLocalStorage via @omnixys/context
+  - Integration with AsyncLocalStorage via @omnixys/context-ts
 - Trace correlation:
   - Automatic linking of logs to OpenTelemetry traces/spans
   - traceId and spanId enrichment
@@ -68,8 +68,8 @@ Legacy logging utilities and unstructured log patterns have been removed.
 🧱 Architecture:
 - Lightweight abstraction over structured logging engine (e.g. pino-compatible)
 - Tight integration with:
-  - @omnixys/context (request-scoped metadata)
-  - @omnixys/observability (trace correlation)
+  - @omnixys/context-ts (request-scoped metadata)
+  - @omnixys/observability-ts (trace correlation)
 - Scoped logger instances for modular logging
 - Designed for high-throughput microservices
 
@@ -82,8 +82,8 @@ Legacy logging utilities and unstructured log patterns have been removed.
 - Requires Node.js >= 20
 - Designed for NestJS-based microservices
 - Fully compatible with:
-  - @omnixys/context (request context propagation)
-  - @omnixys/observability (tracing integration)
+  - @omnixys/context-ts (request context propagation)
+  - @omnixys/observability-ts (tracing integration)
   - @omnixys/kafka (event-level logging)
   - @omnixys/security (audit & security logs)
 
@@ -92,14 +92,14 @@ This release establishes a unified, structured logging foundation across all
 Omnixys services, enabling traceable, searchable, and context-rich logs for
 modern distributed architectures.
 * **Logger:** Complete redesign of logging system with structured logging, context awareness,
-and tight integration with @omnixys/context and @omnixys/observability.
+and tight integration with @omnixys/context-ts and @omnixys/observability-ts.
 Legacy logging utilities and unstructured log patterns have been removed.
 
 ✨ Features:
 - Structured logging (JSON-first) for production-grade observability
 - Context-aware logging:
   - Automatic injection of requestId, tenantId, actorId
-  - Integration with AsyncLocalStorage via @omnixys/context
+  - Integration with AsyncLocalStorage via @omnixys/context-ts
 - Trace correlation:
   - Automatic linking of logs to OpenTelemetry traces/spans
   - traceId and spanId enrichment
@@ -121,8 +121,8 @@ Legacy logging utilities and unstructured log patterns have been removed.
 🧱 Architecture:
 - Lightweight abstraction over structured logging engine (e.g. pino-compatible)
 - Tight integration with:
-  - @omnixys/context (request-scoped metadata)
-  - @omnixys/observability (trace correlation)
+  - @omnixys/context-ts (request-scoped metadata)
+  - @omnixys/observability-ts (trace correlation)
 - Scoped logger instances for modular logging
 - Designed for high-throughput microservices
 
@@ -135,8 +135,8 @@ Legacy logging utilities and unstructured log patterns have been removed.
 - Requires Node.js >= 20
 - Designed for NestJS-based microservices
 - Fully compatible with:
-  - @omnixys/context (request context propagation)
-  - @omnixys/observability (tracing integration)
+  - @omnixys/context-ts (request context propagation)
+  - @omnixys/observability-ts (tracing integration)
   - @omnixys/kafka (event-level logging)
   - @omnixys/security (audit & security logs)
 
@@ -144,7 +144,7 @@ Legacy logging utilities and unstructured log patterns have been removed.
 This release establishes a unified, structured logging foundation across all
 Omnixys services, enabling traceable, searchable, and context-rich logs for
 modern distributed architectures.
-* **Logger:** * complete introduction of new @omnixys/logger package
+* **Logger:** * complete introduction of new @omnixys/logger-ts package
 * replaces all previous ad-hoc logging implementations
 * introduces structured, context-aware logging system
 * logging API is now scoped-based via OmnixysLogger.createScope()
@@ -223,7 +223,7 @@ modern distributed architectures.
 
 ### ⚠ BREAKING CHANGE
 
-* **Logger:** * complete introduction of new @omnixys/logger package
+* **Logger:** * complete introduction of new @omnixys/logger-ts package
 * replaces all previous ad-hoc logging implementations
 * introduces structured, context-aware logging system
 * logging API is now scoped-based via OmnixysLogger.createScope()
@@ -245,7 +245,7 @@ modern distributed architectures.
 
 ### ⚠ BREAKING CHANGE
 
-* **Logger:** * complete introduction of new @omnixys/logger package
+* **Logger:** * complete introduction of new @omnixys/logger-ts package
 * replaces all previous ad-hoc logging implementations
 * introduces structured, context-aware logging system
 * logging API is now scoped-based via OmnixysLogger.createScope()

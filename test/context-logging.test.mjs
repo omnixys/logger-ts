@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { ContextAccessor } from "@omnixys/context";
+import { ContextAccessor } from "@omnixys/context-ts";
 import { lastValueFrom, of } from "rxjs";
 import { LoggingInterceptor } from "../dist/nest/logger.interceptor.js";
 

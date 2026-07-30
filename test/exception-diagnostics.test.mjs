@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { FrameworkException } from "@omnixys/contracts";
+import { FrameworkException } from "@omnixys/contracts-ts";
 import {
   ExceptionReporter,
   redactForLog,

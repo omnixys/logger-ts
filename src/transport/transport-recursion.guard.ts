@@ -1,6 +1,6 @@
 import { context, createContextKey } from "@opentelemetry/api";
 
-const TRANSPORT_LOGGING = createContextKey("@omnixys/logger/transport-logging");
+const TRANSPORT_LOGGING = createContextKey("@omnixys/logger-ts/transport-logging");
 let synchronousTransportDepth = 0;
 
 export function isTransportLoggingSuppressed(): boolean {

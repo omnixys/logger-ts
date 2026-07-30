@@ -1,5 +1,5 @@
 import { LoggerModule, OmnixysLogger } from '../dist/index.js';
-import { OMNIXYS_LOGGER } from '@omnixys/logger/token';
+import { OMNIXYS_LOGGER } from '@omnixys/logger-ts/token';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { ContextAccessor } from "@omnixys/context";
-import { ErrorCode } from "@omnixys/contracts";
+import { ContextAccessor } from "@omnixys/context-ts";
+import { ErrorCode } from "@omnixys/contracts-ts";
 import { AsyncBatchLogger } from "../batch/async-batch-logger.js";
 import { LOGGER_OPTIONS } from "../core/logger.constants.js";
 import type { LoggerModuleOptions } from "../core/logger.options.js";

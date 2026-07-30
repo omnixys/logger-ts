@@ -1,4 +1,4 @@
-export const OMNIXYS_LOGGER = Symbol.for('@omnixys/logger');
+export const OMNIXYS_LOGGER = Symbol.for('@omnixys/logger-ts');
 
 export type PlatformLogMetadata = Readonly<Record<string, unknown>>;
 
