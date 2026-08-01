@@ -3,6 +3,16 @@
 All notable changes in this project will be documented in this file.
 
 
+## [3.2.2](https://github.com/omnixys/logger-ts/compare/v3.2.1...v3.2.2) (2026-08-01)
+
+### Deps
+
+* **Deps:** update omnixs package deps ([](https://github.com/omnixys/logger-ts/commit/9600ef037bc4c2b4310b0f2ff789d38ce6607fd0))
+
+### Name
+
+* **Name:** update package name ([](https://github.com/omnixys/logger-ts/commit/27acd92b26b2addb3c41d1b14f90dc3e8654f279))
+
 ## [3.2.1](https://github.com/omnixys/logger-ts/compare/v3.2.0...v3.2.1) (2026-07-30)
 
 ### Deps
