@@ -1,4 +1,5 @@
 import type { LogDTO } from "@omnixys/contracts-ts";
+import { context, trace } from "@opentelemetry/api";
 import {
   logs,
   SeverityNumber,
@@ -22,12 +23,34 @@ export class OtelLogTransport implements LogTransport {
   async send(log: LogDTO): Promise<void> {
     const logger = logs.getLogger("@omnixys/logger-ts");
     logger.emit({
+      context: contextWithLogTrace(log),
       severityNumber: severityNumbers[log.level],
       severityText: log.level.toUpperCase(),
       body: log.message,
       attributes: canonicalAttributes(log),
     });
   }
+}
+
+function contextWithLogTrace(log: LogDTO) {
+  const traceId = stringValue(log.traceContext?.traceId);
+  const spanId = stringValue(log.traceContext?.spanId);
+  if (!isTraceId(traceId) || !isSpanId(spanId)) return context.active();
+
+  return trace.setSpanContext(context.active(), {
+    traceId,
+    spanId,
+    traceFlags: 1,
+    isRemote: false,
+  });
+}
+
+function isTraceId(value: string | undefined): value is string {
+  return /^[0-9a-f]{32}$/i.test(value ?? '') && !/^0{32}$/.test(value ?? '');
+}
+
+function isSpanId(value: string | undefined): value is string {
+  return /^[0-9a-f]{16}$/i.test(value ?? '') && !/^0{16}$/.test(value ?? '');
 }
 
 function canonicalAttributes(log: LogDTO): LogAttributes {
