@@ -3,6 +3,16 @@
 All notable changes in this project will be documented in this file.
 
 
+## [3.2.3](https://github.com/omnixys/logger-ts/compare/v3.2.2...v3.2.3) (2026-08-22)
+
+### Agent
+
+* **Agent:** add repository development instructions ([](https://github.com/omnixys/logger-ts/commit/78103d7c1ab49166bf486b90ebb0f3c1e3fd12e2))
+
+### Dir
+
+* **Dir:** remove target dir ([](https://github.com/omnixys/logger-ts/commit/a508eea26c1abada40ce873fec93da76def989a2))
+
 ## [3.2.2](https://github.com/omnixys/logger-ts/compare/v3.2.1...v3.2.2) (2026-08-01)
 
 ### Deps
