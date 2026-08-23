@@ -3,6 +3,12 @@
 All notable changes in this project will be documented in this file.
 
 
+## [3.2.4](https://github.com/omnixys/logger-ts/compare/v3.2.3...v3.2.4) (2026-08-23)
+
+### Logger
+
+* **Logger:** debug readiness request logs ([](https://github.com/omnixys/logger-ts/commit/8c4528e29f61a4aaacc7e775de69c49ed1a9779a))
+
 ## [3.2.3](https://github.com/omnixys/logger-ts/compare/v3.2.2...v3.2.3) (2026-08-22)
 
 ### Agent
