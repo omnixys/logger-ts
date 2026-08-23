@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { ContextAccessor } from "@omnixys/context-ts";
-import { lastValueFrom, of } from "rxjs";
+import { lastValueFrom, of, throwError } from "rxjs";
 import { LoggingInterceptor } from "../dist/nest/logger.interceptor.js";
 
 test("HTTP logging consumes canonical context instead of forwarded headers", async () => {
@@ -9,6 +9,7 @@ test("HTTP logging consumes canonical context instead of forwarded headers", asy
   const logger = {
     log: () => ({
       info: (message, metadata) => entries.push({ message, metadata }),
+      debug: (message, metadata) => entries.push({ message, metadata }),
       error: (message, metadata) => entries.push({ message, metadata }),
     }),
   };
@@ -63,11 +64,78 @@ test("HTTP logging consumes canonical context instead of forwarded headers", asy
   assert.equal(entries[0].metadata.traceId, "trace-1");
 });
 
+test("readiness GET and HEAD request lifecycle logs use debug", async () => {
+  for (const method of ["GET", "HEAD"]) {
+    const entries = [];
+    const interceptor = new LoggingInterceptor({
+      log: () => ({
+        info: (message) => entries.push({ level: "info", message }),
+        debug: (message) => entries.push({ level: "debug", message }),
+        error: (message) => entries.push({ level: "error", message }),
+      }),
+    });
+    const executionContext = httpContext(method, "/health/readiness");
+
+    await lastValueFrom(
+      interceptor.intercept(executionContext, { handle: () => of("ok") }),
+    );
+
+    assert.deepEqual(entries.map(({ level, message }) => [level, message]), [
+      ["debug", "Incoming request"],
+      ["debug", "Request completed"],
+    ]);
+  }
+});
+
+test("only readiness uses debug; liveness and normal requests remain info", async () => {
+  for (const url of ["/health/liveness", "/api/users"]) {
+    const entries = [];
+    const interceptor = new LoggingInterceptor({
+      log: () => ({
+        info: (message) => entries.push({ level: "info", message }),
+        debug: (message) => entries.push({ level: "debug", message }),
+        error: (message) => entries.push({ level: "error", message }),
+      }),
+    });
+
+    await lastValueFrom(
+      interceptor.intercept(httpContext("GET", url), { handle: () => of("ok") }),
+    );
+
+    assert.deepEqual(entries.map(({ level }) => level), ["info", "info"]);
+  }
+});
+
+test("request failures remain error regardless of readiness path", async () => {
+  const entries = [];
+  const interceptor = new LoggingInterceptor({
+    log: () => ({
+      info: (message) => entries.push({ level: "info", message }),
+      debug: (message) => entries.push({ level: "debug", message }),
+      error: (message) => entries.push({ level: "error", message }),
+    }),
+  });
+
+  await assert.rejects(
+    lastValueFrom(
+      interceptor.intercept(httpContext("GET", "/health/readiness"), {
+        handle: () => throwError(() => new Error("probe failed")),
+      }),
+    ),
+  );
+
+  assert.deepEqual(entries.map(({ level, message }) => [level, message]), [
+    ["debug", "Incoming request"],
+    ["error", "Request failed"],
+  ]);
+});
+
 test("HTTP logging fallback never reads x-forwarded-for directly", async () => {
   const entries = [];
   const interceptor = new LoggingInterceptor({
     log: () => ({
       info: (_message, metadata) => entries.push(metadata),
+      debug: (_message, metadata) => entries.push(metadata),
       error: (_message, metadata) => entries.push(metadata),
     }),
   });
@@ -96,6 +164,7 @@ test("interceptor does not crash when ContextAccessor.get() returns undefined", 
   const interceptor = new LoggingInterceptor({
     log: () => ({
       info: (message, metadata) => entries.push({ message, metadata }),
+      debug: (message, metadata) => entries.push({ message, metadata }),
       error: (message, metadata) => entries.push({ message, metadata }),
     }),
   });
@@ -125,6 +194,7 @@ test("interceptor handles empty ContextAccessor client gracefully", async () => 
   const interceptor = new LoggingInterceptor({
     log: () => ({
       info: (message, metadata) => entries.push({ message, metadata }),
+      debug: (message, metadata) => entries.push({ message, metadata }),
       error: (message, metadata) => entries.push({ message, metadata }),
     }),
   });
@@ -162,6 +232,7 @@ test("GraphQL operations are logged with canonical request metadata", async () =
   const interceptor = new LoggingInterceptor({
     log: () => ({
       info: (message, metadata) => entries.push({ message, metadata }),
+      debug: (message, metadata) => entries.push({ message, metadata }),
       error: (message, metadata) => entries.push({ message, metadata }),
     }),
   });
@@ -195,3 +266,13 @@ test("GraphQL operations are logged with canonical request metadata", async () =
   assert.equal(entries[0].metadata.requestId, "request-graphql");
   assert.equal(entries[1].metadata.statusCode, 200);
 });
+
+function httpContext(method, url) {
+  return {
+    getType: () => "http",
+    switchToHttp: () => ({
+      getRequest: () => ({ method, url, ip: "127.0.0.1", headers: {} }),
+      getResponse: () => ({ statusCode: 200 }),
+    }),
+  };
+}

@@ -65,10 +65,11 @@ export class LoggingInterceptor implements NestInterceptor {
       request?.user?.id;
 
     const log = this.logger.log("http.request");
+    const requestLog = isReadinessRequest(url) ? log.debug : log.info;
 
     const start = Date.now();
 
-    log.info("Incoming request", {
+    requestLog.call(log, "Incoming request", {
       method,
       url,
       ip,
@@ -82,7 +83,7 @@ export class LoggingInterceptor implements NestInterceptor {
         next: () => {
           const duration = Date.now() - start;
 
-          log.info("Request completed", {
+          requestLog.call(log, "Request completed", {
             method,
             url,
             statusCode: response.statusCode,
@@ -121,6 +122,11 @@ export class LoggingInterceptor implements NestInterceptor {
       }),
     );
   }
+}
+
+function isReadinessRequest(url: string): boolean {
+  const path = url.split(/[?#]/, 1)[0].replace(/\/+$/, "");
+  return path === "/health/readiness";
 }
 
 function requestTransport(

@@ -15,7 +15,7 @@ const logFile = resolve(LOG_DIRECTORY ?? "log", LOG_FILE_DEFAULT_NAME ?? "server
 const isProd = NODE_ENV === "production";
 const logToFile = LOG_TO_FILE === "true";
 
-const logLevel = (isProd ? "info" : (LOG_LEVEL ?? "debug")) as
+const logLevel = (LOG_LEVEL ?? (isProd ? "info" : "debug")) as
   | "fatal"
   | "error"
   | "warn"
@@ -169,4 +169,3 @@ function shutdownAndResignal(signal: "SIGINT" | "SIGTERM"): void {
     }
   });
 }
-
