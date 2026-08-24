@@ -3,6 +3,12 @@
 All notable changes in this project will be documented in this file.
 
 
+## [3.2.5](https://github.com/omnixys/logger-ts/compare/v3.2.4...v3.2.5) (2026-08-24)
+
+### Context
+
+* **Context:** update dependency ([](https://github.com/omnixys/logger-ts/commit/95acc6a52c1b308134a63fe0ad2c5b5c0ded59cc))
+
 ## [3.2.4](https://github.com/omnixys/logger-ts/compare/v3.2.3...v3.2.4) (2026-08-23)
 
 ### Logger
