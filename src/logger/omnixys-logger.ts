@@ -8,6 +8,7 @@ import {
   flushParentLogger,
   loggerRuntimeDiagnostics,
 } from "./logger.config.js";
+import { loggerRuntimeSinkDiagnostics } from "./logger-runtime.js";
 
 @Injectable()
 export class OmnixysLogger implements OnModuleDestroy {
@@ -38,6 +39,7 @@ export class OmnixysLogger implements OnModuleDestroy {
   diagnostics() {
     return {
       ...loggerRuntimeDiagnostics(),
+      ...loggerRuntimeSinkDiagnostics(),
       ...this.batch.diagnostics(),
     };
   }

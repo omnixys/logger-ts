@@ -1,27 +1,28 @@
 import { resolve } from "node:path";
 import pino, { type TransportTargetOptions } from "pino";
+import {
+  routePinoLog,
+  sanitizePinoConsoleArguments,
+  shouldWriteConsole,
+} from "./logger-runtime.js";
 
 const {
   NODE_ENV,
   LOG_DIRECTORY,
   LOG_FILE_DEFAULT_NAME,
   LOG_PRETTY,
-  LOG_LEVEL,
   LOG_TO_FILE,
   SERVICE_NAME,
 } = process.env;
 
-const logFile = resolve(LOG_DIRECTORY ?? "log", LOG_FILE_DEFAULT_NAME ?? "server.log");
+const logFile = resolve(
+  LOG_DIRECTORY ?? "log",
+  LOG_FILE_DEFAULT_NAME ?? "server.log",
+);
 const isProd = NODE_ENV === "production";
 const logToFile = LOG_TO_FILE === "true";
 
-const logLevel = (LOG_LEVEL ?? (isProd ? "info" : "debug")) as
-  | "fatal"
-  | "error"
-  | "warn"
-  | "info"
-  | "debug"
-  | "trace";
+const logLevel = "trace" as const;
 
 const pretty = !isProd && (LOG_PRETTY === undefined || LOG_PRETTY === "true");
 
@@ -35,7 +36,7 @@ const fileTarget: TransportTargetOptions = {
 };
 
 const prettyTarget: TransportTargetOptions = {
-  level: logLevel,
+  level: "trace",
   target: "pino-pretty",
   options: {
     translateTime: "SYS:standard",
@@ -55,7 +56,9 @@ const transport = useTransport ? pino.transport({ targets }) : undefined;
 if (transport) {
   transport.on("error", (err: Error) => {
     try {
-      process.stderr.write(`[omnixys/logger] transport failure: ${err.message}\n`);
+      process.stderr.write(
+        `[omnixys/logger] transport failure: ${err.message}\n`,
+      );
     } catch {
       // best-effort fallback
     }
@@ -68,6 +71,18 @@ export const parentLogger = pino(
     base: {
       env: NODE_ENV,
       service: SERVICE_NAME ?? process.env.SERVICE ?? "unknown",
+    },
+    hooks: {
+      logMethod(args, method, level) {
+        try {
+          routePinoLog(this, args, level);
+        } catch {
+          // Log normalization and OTLP routing must not affect callers.
+        }
+        if (shouldWriteConsole(level)) {
+          method.apply(this, sanitizePinoConsoleArguments(args));
+        }
+      },
     },
   },
   ...(transport ? [transport] : []),

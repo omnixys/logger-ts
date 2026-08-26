@@ -10,6 +10,10 @@ import { LOG_TRANSPORT, LOGGER_OPTIONS } from "../core/logger.constants.js";
 import type { LoggerModuleOptions } from "../core/logger.options.js";
 import type { LogTransport } from "../transport/log-transport.interface.js";
 import { runWithTransportLoggingSuppressed } from "../transport/transport-recursion.guard.js";
+import {
+  attachLoggerBatch,
+  detachLoggerBatch,
+} from "../logger/logger-runtime.js";
 
 export interface BatchLoggerDiagnostics {
   readonly initialized: boolean;
@@ -45,6 +49,7 @@ export class AsyncBatchLogger implements OnModuleInit, OnModuleDestroy {
   ) {}
 
   onModuleInit(): void {
+    attachLoggerBatch(this);
     if (this.initialized || !this.options.batch?.enabled) return;
     this.initialized = true;
 
@@ -79,9 +84,7 @@ export class AsyncBatchLogger implements OnModuleInit, OnModuleDestroy {
 
     this.buffer.push({ log, ctx: ContextStore.capture() });
 
-    if (
-      this.buffer.length >= positiveInteger(this.options.batch.maxSize, 50)
-    ) {
+    if (this.buffer.length >= positiveInteger(this.options.batch.maxSize, 50)) {
       void this.flush();
     }
   }
@@ -130,8 +133,12 @@ export class AsyncBatchLogger implements OnModuleInit, OnModuleDestroy {
     };
   }
 
-  onModuleDestroy(): Promise<void> {
-    return this.close();
+  async onModuleDestroy(): Promise<void> {
+    try {
+      await this.close();
+    } finally {
+      detachLoggerBatch(this);
+    }
   }
 
   private async drain(): Promise<void> {

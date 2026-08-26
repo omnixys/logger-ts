@@ -10,6 +10,7 @@ import {
 } from "./logger.config.js";
 import { isTransportLoggingSuppressed } from "../transport/transport-recursion.guard.js";
 import { getCanonicalLogMetadata } from "./context-log-metadata.js";
+import { LOG_RECORD } from "./logger-runtime.js";
 import { LogDTO, LogLevel } from "@omnixys/contracts-ts";
 import {
   redactForLog,
@@ -53,9 +54,7 @@ export class ScopedLogger {
         ? joinComponent(this.component, componentOrMetadata)
         : this.component;
     const childMetadata =
-      typeof componentOrMetadata === "string"
-        ? metadata
-        : componentOrMetadata;
+      typeof componentOrMetadata === "string" ? metadata : componentOrMetadata;
 
     return new ScopedLogger(
       this.clazz,
@@ -155,6 +154,7 @@ export class ScopedLogger {
     try {
       this.pino[pinoLevel](
         {
+          [LOG_RECORD]: { log, batch: this.batch },
           class: this.clazz,
           service: this.options.serviceName,
           ...metadata,
@@ -163,12 +163,6 @@ export class ScopedLogger {
       );
     } catch {
       // Pino transport failure must not affect application control flow.
-    }
-
-    try {
-      this.batch.enqueue(log);
-    } catch {
-      // Custom transports and compatibility batch implementations are isolated.
     }
   }
 }
@@ -220,7 +214,9 @@ function normalizeObject(value: unknown): unknown {
 
 function toMetadataRecord(value: unknown): Record<string, unknown> {
   const serialized = safeSerialize(value);
-  return serialized && typeof serialized === "object" && !Array.isArray(serialized)
+  return serialized &&
+    typeof serialized === "object" &&
+    !Array.isArray(serialized)
     ? (serialized as Record<string, unknown>)
     : {};
 }
