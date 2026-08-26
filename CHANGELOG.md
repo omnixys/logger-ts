@@ -3,6 +3,12 @@
 All notable changes in this project will be documented in this file.
 
 
+## [3.2.6](https://github.com/omnixys/logger-ts/compare/v3.2.5...v3.2.6) (2026-08-26)
+
+### Logging
+
+* **Logging:** route all logger paths through otlp ([](https://github.com/omnixys/logger-ts/commit/97fddeae5ffff4de5137b2617212a6b16669a1c2))
+
 ## [3.2.5](https://github.com/omnixys/logger-ts/compare/v3.2.4...v3.2.5) (2026-08-24)
 
 ### Context
