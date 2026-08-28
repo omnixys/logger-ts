@@ -3,6 +3,12 @@
 All notable changes in this project will be documented in this file.
 
 
+## [3.2.7](https://github.com/omnixys/logger-ts/compare/v3.2.6...v3.2.7) (2026-08-28)
+
+### Deps
+
+* **Deps:** update contracts-ts ([](https://github.com/omnixys/logger-ts/commit/683f3126a2f2d90b5eef63607e8186a37ea323cf))
+
 ## [3.2.6](https://github.com/omnixys/logger-ts/compare/v3.2.5...v3.2.6) (2026-08-26)
 
 ### Logging
