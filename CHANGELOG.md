@@ -3,6 +3,26 @@
 All notable changes in this project will be documented in this file.
 
 
+## [4.0.0](https://github.com/omnixys/logger-ts/compare/v3.2.7...v4.0.0) (2026-09-02)
+
+### Ci
+
+* **Ci:** add missing labeler and dependabot config to match contracts ([](https://github.com/omnixys/logger-ts/commit/943e076be5cf1275cf0edeb4fd96a9d1d9bb53e9))
+* **Ci:** add PR build check workflow for main ([](https://github.com/omnixys/logger-ts/commit/fd761f1da59d0b8427dbc95f1a5fe39cdeaa201d))
+* **Ci:** add npm registry auth before install in release workflow ([](https://github.com/omnixys/logger-ts/commit/571a543a69fafa56fb2dc9388bac126974ece056))
+
+### Deps
+
+* **Deps:** update omnixys deps ([](https://github.com/omnixys/logger-ts/commit/960d70f2e19969d5eebf967bf31e4df5ab378674))
+
+### Other
+
+* **Other:** Merge pull request #1 from omnixys/migration/uuid-v7 ([](https://github.com/omnixys/logger-ts/commit/c52fde4b9963858414a79826d67ffb2f93e9c7e4)), closes [#1](https://github.com/omnixys/logger-ts/issues/1)
+
+### Runtime
+
+* **Runtime:** require node 26.8.1 and pnpm 11.24.0 ([](https://github.com/omnixys/logger-ts/commit/9035bdc725e7903e4448fc62aa9d65a52e289f5d))
+
 ## [3.2.7](https://github.com/omnixys/logger-ts/compare/v3.2.6...v3.2.7) (2026-08-28)
 
 ### Deps
