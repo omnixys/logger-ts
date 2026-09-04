@@ -3,6 +3,12 @@
 All notable changes in this project will be documented in this file.
 
 
+## [4.1.0](https://github.com/omnixys/logger-ts/compare/v4.0.0...v4.1.0) (2026-09-04)
+
+### Log
+
+* **Log:** add logger ([](https://github.com/omnixys/logger-ts/commit/b481e092ba1bdb98b197e41b7bb13afa246c4e3b))
+
 ## [4.0.0](https://github.com/omnixys/logger-ts/compare/v3.2.7...v4.0.0) (2026-09-02)
 
 ### Ci
