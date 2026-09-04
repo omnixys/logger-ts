@@ -31,6 +31,7 @@ export type LoggerMetadata = Readonly<Record<string, unknown>>;
 export class ScopedLogger {
   private readonly pino;
   private readonly baseMetadata: LoggerMetadata;
+  private readonly source?: string;
 
   constructor(
     private readonly clazz: string,
@@ -38,16 +39,24 @@ export class ScopedLogger {
     private readonly batch: AsyncBatchLogger,
     metadata: LoggerMetadata = {},
     private readonly component?: string,
+    source?: string,
   ) {
     this.pino = getLogger(clazz, "class");
     this.baseMetadata = Object.freeze(toMetadataRecord(metadata));
+    this.source = source;
   }
 
   child(component: string, metadata?: LoggerMetadata): ScopedLogger;
   child(metadata: LoggerMetadata): ScopedLogger;
   child(
+    component: string,
+    metadata: LoggerMetadata,
+    source: string,
+  ): ScopedLogger;
+  child(
     componentOrMetadata: string | LoggerMetadata,
     metadata: LoggerMetadata = {},
+    source?: string,
   ): ScopedLogger {
     const component =
       typeof componentOrMetadata === "string"
@@ -62,11 +71,25 @@ export class ScopedLogger {
       this.batch,
       { ...this.baseMetadata, ...toMetadataRecord(childMetadata) },
       component,
+      typeof componentOrMetadata === "string"
+        ? (source ?? this.source)
+        : this.source,
     );
   }
 
   withMetadata(metadata: LoggerMetadata): ScopedLogger {
     return this.child(metadata);
+  }
+
+  withSource(source: string): ScopedLogger {
+    return new ScopedLogger(
+      this.clazz,
+      this.options,
+      this.batch,
+      this.baseMetadata,
+      this.component,
+      source,
+    );
   }
 
   async flush(): Promise<void> {
@@ -143,6 +166,7 @@ export class ScopedLogger {
       service: this.options.serviceName,
       timestamp: new Date().toISOString(),
       metadata,
+      ...(this.source ? { source: this.source } : {}),
       traceContext: {
         traceId: contextMetadata.traceId,
         spanId: contextMetadata.spanId,

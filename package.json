@@ -47,9 +47,9 @@
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.4.2",
     "@nestjs/core": "^11.1.17",
-    "@omnixys/context-ts": "^4.0.2",
-    "@omnixys/contracts-ts": "^4.0.0",
-    "@omnixys/observability-ts": "^4.0.0",
+    "@omnixys/context-ts": "^4.1.0",
+    "@omnixys/contracts-ts": "^4.1.0",
+    "@omnixys/observability-ts": "^4.1.0",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/context-async-hooks": "^2.6.0",
     "@opentelemetry/sdk-trace-base": "^2.6.0",
@@ -68,9 +68,9 @@
   "peerDependencies": {
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.1.17",
-    "@omnixys/context-ts": "^4.0.2",
-    "@omnixys/contracts-ts": "^4.0.0",
-    "@omnixys/observability-ts": "^4.0.0",
+    "@omnixys/context-ts": "^4.1.0",
+    "@omnixys/contracts-ts": "^4.1.0",
+    "@omnixys/observability-ts": "^4.1.0",
     "@opentelemetry/api": "^1.9.0"
   },
   "dependencies": {

@@ -18,12 +18,38 @@ export class OmnixysLogger implements OnModuleDestroy {
     private readonly batch: AsyncBatchLogger,
   ) {}
 
-  log(context: string): ScopedLogger {
-    return new ScopedLogger(context, this.options, this.batch);
+  log(context: string): ScopedLogger;
+  log(context: string, source: string): ScopedLogger;
+  log(context: string, source?: string): ScopedLogger {
+    return new ScopedLogger(
+      context,
+      this.options,
+      this.batch,
+      {},
+      undefined,
+      source,
+    );
   }
 
-  child(context: string, metadata: LoggerMetadata = {}): ScopedLogger {
-    return new ScopedLogger(context, this.options, this.batch, metadata);
+  child(context: string, metadata?: LoggerMetadata): ScopedLogger;
+  child(
+    context: string,
+    metadata: LoggerMetadata,
+    source: string,
+  ): ScopedLogger;
+  child(
+    context: string,
+    metadata: LoggerMetadata = {},
+    source?: string,
+  ): ScopedLogger {
+    return new ScopedLogger(
+      context,
+      this.options,
+      this.batch,
+      metadata,
+      undefined,
+      source,
+    );
   }
 
   async flush(): Promise<void> {

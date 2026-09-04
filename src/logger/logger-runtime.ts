@@ -188,6 +188,7 @@ function logDtoFromPino(
       ...contextMetadata,
       ...(levelNumber === 60 ? { originalSeverity: "fatal" } : {}),
     }),
+    source: stringValue(bindings.source),
     traceContext: {
       traceId: contextMetadata.traceId,
       spanId: contextMetadata.spanId,
