@@ -3,6 +3,12 @@
 All notable changes in this project will be documented in this file.
 
 
+## [4.1.1](https://github.com/omnixys/logger-ts/compare/v4.1.0...v4.1.1) (2026-09-16)
+
+### Logger
+
+* **Logger:** trace request lifecycle logs ([](https://github.com/omnixys/logger-ts/commit/879755303a448840c0d3135842a2f0944d7089e8))
+
 ## [4.1.0](https://github.com/omnixys/logger-ts/compare/v4.0.0...v4.1.0) (2026-09-04)
 
 ### Log
