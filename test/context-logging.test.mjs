@@ -10,6 +10,7 @@ test("HTTP logging consumes canonical context instead of forwarded headers", asy
     log: () => ({
       info: (message, metadata) => entries.push({ message, metadata }),
       debug: (message, metadata) => entries.push({ message, metadata }),
+      trace: (message, metadata) => entries.push({ message, metadata }),
       error: (message, metadata) => entries.push({ message, metadata }),
     }),
   };
@@ -64,13 +65,14 @@ test("HTTP logging consumes canonical context instead of forwarded headers", asy
   assert.equal(entries[0].metadata.traceId, "trace-1");
 });
 
-test("readiness GET and HEAD request lifecycle logs use debug", async () => {
+test("request lifecycle logs use trace", async () => {
   for (const method of ["GET", "HEAD"]) {
     const entries = [];
     const interceptor = new LoggingInterceptor({
       log: () => ({
         info: (message) => entries.push({ level: "info", message }),
         debug: (message) => entries.push({ level: "debug", message }),
+        trace: (message) => entries.push({ level: "trace", message }),
         error: (message) => entries.push({ level: "error", message }),
       }),
     });
@@ -81,19 +83,20 @@ test("readiness GET and HEAD request lifecycle logs use debug", async () => {
     );
 
     assert.deepEqual(entries.map(({ level, message }) => [level, message]), [
-      ["debug", "Incoming request"],
-      ["debug", "Request completed"],
+      ["trace", "Incoming request"],
+      ["trace", "Request completed"],
     ]);
   }
 });
 
-test("only readiness uses debug; liveness and normal requests remain info", async () => {
+test("liveness and normal requests also use trace", async () => {
   for (const url of ["/health/liveness", "/api/users"]) {
     const entries = [];
     const interceptor = new LoggingInterceptor({
       log: () => ({
         info: (message) => entries.push({ level: "info", message }),
         debug: (message) => entries.push({ level: "debug", message }),
+        trace: (message) => entries.push({ level: "trace", message }),
         error: (message) => entries.push({ level: "error", message }),
       }),
     });
@@ -102,7 +105,7 @@ test("only readiness uses debug; liveness and normal requests remain info", asyn
       interceptor.intercept(httpContext("GET", url), { handle: () => of("ok") }),
     );
 
-    assert.deepEqual(entries.map(({ level }) => level), ["info", "info"]);
+    assert.deepEqual(entries.map(({ level }) => level), ["trace", "trace"]);
   }
 });
 
@@ -112,6 +115,7 @@ test("request failures remain error regardless of readiness path", async () => {
     log: () => ({
       info: (message) => entries.push({ level: "info", message }),
       debug: (message) => entries.push({ level: "debug", message }),
+      trace: (message) => entries.push({ level: "trace", message }),
       error: (message) => entries.push({ level: "error", message }),
     }),
   });
@@ -125,7 +129,7 @@ test("request failures remain error regardless of readiness path", async () => {
   );
 
   assert.deepEqual(entries.map(({ level, message }) => [level, message]), [
-    ["debug", "Incoming request"],
+    ["trace", "Incoming request"],
     ["error", "Request failed"],
   ]);
 });
@@ -136,6 +140,7 @@ test("HTTP logging fallback never reads x-forwarded-for directly", async () => {
     log: () => ({
       info: (_message, metadata) => entries.push(metadata),
       debug: (_message, metadata) => entries.push(metadata),
+      trace: (_message, metadata) => entries.push(metadata),
       error: (_message, metadata) => entries.push(metadata),
     }),
   });
@@ -165,6 +170,7 @@ test("interceptor does not crash when ContextAccessor.get() returns undefined", 
     log: () => ({
       info: (message, metadata) => entries.push({ message, metadata }),
       debug: (message, metadata) => entries.push({ message, metadata }),
+      trace: (message, metadata) => entries.push({ message, metadata }),
       error: (message, metadata) => entries.push({ message, metadata }),
     }),
   });
@@ -195,6 +201,7 @@ test("interceptor handles empty ContextAccessor client gracefully", async () => 
     log: () => ({
       info: (message, metadata) => entries.push({ message, metadata }),
       debug: (message, metadata) => entries.push({ message, metadata }),
+      trace: (message, metadata) => entries.push({ message, metadata }),
       error: (message, metadata) => entries.push({ message, metadata }),
     }),
   });
@@ -233,6 +240,7 @@ test("GraphQL operations are logged with canonical request metadata", async () =
     log: () => ({
       info: (message, metadata) => entries.push({ message, metadata }),
       debug: (message, metadata) => entries.push({ message, metadata }),
+      trace: (message, metadata) => entries.push({ message, metadata }),
       error: (message, metadata) => entries.push({ message, metadata }),
     }),
   });
