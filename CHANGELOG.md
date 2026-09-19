@@ -3,6 +3,16 @@
 All notable changes in this project will be documented in this file.
 
 
+## [4.2.0](https://github.com/omnixys/logger-ts/compare/v4.1.1...v4.2.0) (2026-09-19)
+
+### Deps
+
+* **Deps:** update omnixys contracts-ts package ([](https://github.com/omnixys/logger-ts/commit/70d1b9f6c85ef4152403d114295e0bcc2b2e5cea))
+
+### Logger
+
+* **Logger:** add noise level with pino custom levels ([](https://github.com/omnixys/logger-ts/commit/abf0daa34ecfe8a1661452156067126948873c58))
+
 ## [4.1.1](https://github.com/omnixys/logger-ts/compare/v4.1.0...v4.1.1) (2026-09-16)
 
 ### Logger
