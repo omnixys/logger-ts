@@ -143,6 +143,38 @@ test("ScopedLogger routes one record through its configured batch", () => {
   });
 });
 
+test("ScopedLogger noise records route at the noise level", () => {
+  withoutLevelEnvironment(() => {
+    const records = [];
+    const batch = { enqueue: (record) => records.push(record) };
+    configureLoggerRuntime({
+      serviceName: "orders",
+      environment: "production",
+      otel: { level: "noise" },
+    });
+
+    const logger = new ScopedLogger(
+      "OrderService",
+      { serviceName: "orders" },
+      batch,
+    );
+    logger.noise("kafka_cluster_chatter");
+
+    assert.equal(records.length, 1);
+    assert.equal(records[0].level, "noise");
+    assert.equal(records[0].message, "kafka_cluster_chatter");
+  });
+});
+
+test("noise sink level is resolved from the environment", () => {
+  withEnvironment({ LOG_CONSOLE_LEVEL: "noise" }, () => {
+    assert.equal(
+      resolveConsoleLevel({ serviceName: "test", environment: "production" }),
+      "noise",
+    );
+  });
+});
+
 function withoutLevelEnvironment(callback) {
   return withEnvironment(
     {

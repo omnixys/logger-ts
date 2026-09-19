@@ -14,6 +14,7 @@ import { isTransportLoggingSuppressed } from "../transport/transport-recursion.g
 import { getCanonicalLogMetadata } from "./context-log-metadata.js";
 
 const LEVEL_NUMBER: Record<Exclude<LoggerSinkLevel, "silent">, number> = {
+  noise: 1,
   trace: 10,
   debug: 20,
   info: 30,
@@ -22,6 +23,7 @@ const LEVEL_NUMBER: Record<Exclude<LoggerSinkLevel, "silent">, number> = {
 };
 
 const LEVEL_NAME = new Map<number, LogLevel>([
+  [1, LogLevel.noise],
   [10, LogLevel.trace],
   [20, LogLevel.debug],
   [30, LogLevel.info],
@@ -263,6 +265,7 @@ function isRestrictedEnvironment(environment: string): boolean {
 function sinkLevel(value: string | undefined): LoggerSinkLevel | undefined {
   const normalized = value?.trim().toLowerCase();
   return normalized === "silent" ||
+    normalized === "noise" ||
     normalized === "trace" ||
     normalized === "debug" ||
     normalized === "info" ||

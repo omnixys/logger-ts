@@ -11,6 +11,7 @@ import type { LogTransport } from "./log-transport.interface.js";
 const SENSITIVE_KEY = /(?:authorization|cookie|password|secret|token|api[_-]?key)/i;
 
 const severityNumbers = {
+  noise: SeverityNumber.TRACE2,
   trace: SeverityNumber.TRACE,
   debug: SeverityNumber.DEBUG,
   info: SeverityNumber.INFO,

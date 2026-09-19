@@ -31,4 +31,4 @@ export interface LoggerModuleOptions {
 }
 
 export type LoggerSinkLevel =
-  "silent" | "trace" | "debug" | "info" | "warn" | "error";
+  "silent" | "noise" | "trace" | "debug" | "info" | "warn" | "error";

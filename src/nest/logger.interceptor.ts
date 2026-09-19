@@ -68,7 +68,7 @@ export class LoggingInterceptor implements NestInterceptor {
 
     const start = Date.now();
 
-    log.trace("Incoming request", {
+    log.noise("Incoming request", {
       method,
       url,
       ip,
@@ -82,7 +82,7 @@ export class LoggingInterceptor implements NestInterceptor {
         next: () => {
           const duration = Date.now() - start;
 
-          log.trace("Request completed", {
+          log.noise("Request completed", {
             method,
             url,
             statusCode: response.statusCode,

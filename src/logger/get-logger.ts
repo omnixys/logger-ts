@@ -16,7 +16,10 @@ import { parentLogger } from "./logger.config.js";
  * @remarks Prefer `OmnixysLogger` through Nest dependency injection. This
  * compatibility entry point is routed through the same OTLP runtime.
  */
-export function getLogger(context: string, kind: string = "class"): Logger {
+export function getLogger(
+  context: string,
+  kind: string = "class",
+): Logger<"noise", boolean> {
   const bindings: Record<string, string> = { [kind]: context };
   return parentLogger.child(bindings);
 }

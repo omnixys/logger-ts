@@ -20,7 +20,7 @@ test("preserves the established root exports", () => {
 });
 
 test("preserves synchronous scoped logger method signatures", () => {
-  const methods = ["info", "error", "warn", "debug", "trace"];
+  const methods = ["info", "error", "warn", "debug", "trace", "noise"];
 
   for (const method of methods) {
     assert.equal(typeof loggerPackage.ScopedLogger.prototype[method], "function");

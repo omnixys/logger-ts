@@ -18,6 +18,7 @@ import {
 } from "../diagnostics/log-redaction.js";
 
 const levelMap = {
+  noise: "noise",
   trace: "trace",
   debug: "debug",
   info: "info",
@@ -120,6 +121,10 @@ export class ScopedLogger {
 
   trace(message: string, ...args: unknown[]) {
     this.log(LogLevel.trace, message, ...args);
+  }
+
+  noise(message: string, ...args: unknown[]) {
+    this.log(LogLevel.noise, message, ...args);
   }
 
   private log(level: LogLevel, message: string, ...args: unknown[]) {

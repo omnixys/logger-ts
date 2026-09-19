@@ -24,6 +24,8 @@ const logToFile = LOG_TO_FILE === "true";
 
 const logLevel = "trace" as const;
 
+const baseLevel = "noise" as const;
+
 const pretty = !isProd && (LOG_PRETTY === undefined || LOG_PRETTY === "true");
 
 const fileTarget: TransportTargetOptions = {
@@ -67,7 +69,8 @@ if (transport) {
 
 export const parentLogger = pino(
   {
-    level: logLevel,
+    level: baseLevel,
+    customLevels: { noise: 1 },
     base: {
       env: NODE_ENV,
       service: SERVICE_NAME ?? process.env.SERVICE ?? "unknown",
